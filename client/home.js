@@ -6,8 +6,8 @@ async function loadEvents() {
     const events = await res.json();
     renderEvents(events);
   } catch (err) {
-    console.error('加载活动失败:', err);
-    document.getElementById('event-list').innerHTML = '<p>无法加载活动数据。</p>';
+    console.error('Failed to load the activity:', err);
+    document.getElementById('event-list').innerHTML = '<p>Unable to load activity data.</p>';
   }
 }
 
@@ -16,7 +16,7 @@ function renderEvents(events) {
   container.innerHTML = '';
 
   if (events.length === 0) {
-    container.innerHTML = '<p>当前没有可用的活动。</p>';
+    container.innerHTML = '<p>There are currently no available activities.</p>';
     return;
   }
 
@@ -26,9 +26,9 @@ function renderEvents(events) {
     card.innerHTML = `
       <h3>${ev.name}</h3>
       <p>${ev.description}</p>
-      <p><strong>时间：</strong>${ev.event_date}</p>
-      <p><strong>地点：</strong>${ev.location}</p>
-      <button onclick="viewDetail(${ev.id})">查看详情</button>
+      <p><strong>Time:</strong>${ev.event_date}</p>
+      <p><strong>Location:</strong>${ev.location}</p>
+      <button onclick="viewDetail(${ev.id})">View Details.</button>
     `;
     container.appendChild(card);
   });

@@ -1,4 +1,3 @@
-// server.js
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -8,15 +7,12 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Serve front-end static files (optional, so you can open http://localhost:3000/home.html)
 app.use(express.static(path.join(__dirname, '../client')));
 
-// Root route
 app.get('/', (req, res) => {
-  res.send('✅ API is working. Try /api/events');
+  res.send('✅ Charity Events Server is running. Visit /home.html to view the website.');
 });
 
-// Get all events
 app.get('/api/events', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM events');
@@ -26,7 +22,6 @@ app.get('/api/events', async (req, res) => {
   }
 });
 
-// Get single event by ID
 app.get('/api/events/:id', async (req, res) => {
   const id = req.params.id;
   try {
@@ -38,7 +33,6 @@ app.get('/api/events/:id', async (req, res) => {
   }
 });
 
-// Get all categories
 app.get('/api/categories', async (req, res) => {
   try {
     const [rows] = await db.query('SELECT * FROM categories');
@@ -48,7 +42,6 @@ app.get('/api/categories', async (req, res) => {
   }
 });
 
-// Search endpoint
 app.get('/api/search', async (req, res) => {
   const { date, location, category } = req.query;
   let sql = 'SELECT * FROM events WHERE 1=1';
@@ -75,6 +68,8 @@ app.get('/api/search', async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log('✅ Server running on http://localhost:3000');
+const PORT = 3000;
+app.listen(PORT, () => {
+  console.log(`✅ Server running on http://localhost:${PORT}`);
+  console.log(`🌐 Frontend available at http://localhost:${PORT}/home.html`);
 });

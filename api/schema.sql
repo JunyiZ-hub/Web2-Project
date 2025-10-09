@@ -1,7 +1,5 @@
--- =========================================================
--- PROG2002 A2 - Charity Events Database Schema
--- Author: [Junyi Zhang]
--- =========================================================
+--PROG2002 A2 - Charity Events Database Schema
+--Author: [Junyi Zhang]
 
 DROP DATABASE IF EXISTS charityevents_db;
 
@@ -9,9 +7,7 @@ CREATE DATABASE charityevents_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_c
 
 USE charityevents_db;
 
--- =========================================================
--- 1. Table: organisations
--- =========================================================
+
 CREATE TABLE organisations (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(200) NOT NULL,
@@ -20,17 +16,13 @@ CREATE TABLE organisations (
   contact_phone VARCHAR(50)
 );
 
--- =========================================================
--- 2. Table: categories
--- =========================================================
+
 CREATE TABLE categories (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL
 );
 
--- =========================================================
--- 3. Table: events
--- =========================================================
+
 CREATE TABLE events (
   id INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
@@ -42,22 +34,16 @@ CREATE TABLE events (
   progress INT DEFAULT 0,
   category_id INT,
   organisation_id INT,
-  is_active TINYINT(1) DEFAULT 1,   -- 1 = active, 0 = suspended
+  is_active TINYINT(1) DEFAULT 1,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (category_id) REFERENCES categories(id),
   FOREIGN KEY (organisation_id) REFERENCES organisations(id)
 );
 
--- =========================================================
--- 4. Insert sample data
--- =========================================================
-
--- Organisations
 INSERT INTO organisations (name, description, contact_email, contact_phone) VALUES
 ('Hope Foundation', 'Dedicated to supporting families in need.', 'contact@hopefoundation.org', '0411 111 111'),
 ('Health For All', 'Raising funds for health research and care.', 'info@healthforall.org', '0422 222 222');
 
--- Categories
 INSERT INTO categories (name) VALUES
 ('Gala Dinner'),
 ('Fun Run'),
@@ -65,7 +51,6 @@ INSERT INTO categories (name) VALUES
 ('Concert'),
 ('Community Fair');
 
--- Events
 INSERT INTO events (name, description, event_date, location, price, goal, progress, category_id, organisation_id, is_active) VALUES
 ('Charity Gala 2025', 'An elegant evening to raise funds for children’s education.', '2025-11-01', 'City Hall', 120.00, 15000, 3500, 1, 1, 1),
 ('Run for Hope', 'A 5km fun run to support cancer research.', '2025-10-15', 'Central Park', 25.00, 8000, 4200, 2, 2, 1),
@@ -75,12 +60,3 @@ INSERT INTO events (name, description, event_date, location, price, goal, progre
 ('Summer Run 2025', '10km competitive run for youth wellbeing.', '2025-07-20', 'Harbour Road', 30.00, 10000, 10000, 2, 2, 1),
 ('Winter Gala (Suspended)', 'Event temporarily suspended for policy review.', '2025-12-20', 'Grand Hotel', 150.00, 20000, 5000, 1, 1, 0),
 ('Community Auction Fall', 'Local businesses donate products for charity bidding.', '2026-03-10', 'Town Hall', 0.00, 3000, 900, 3, 1, 1);
-
--- =========================================================
--- 5. Verification queries (optional)
--- =========================================================
--- USE charityevents_db;
--- SHOW TABLES;
--- SELECT * FROM events;
--- SELECT COUNT(*) AS event_count FROM events;
--- =========================================================

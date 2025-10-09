@@ -11,11 +11,9 @@ async function searchEvents() {
   }
 
   try {
-    // Fetch all events (simplify) then filter on client side
     const res = await fetch(`${API_BASE}/events`);
     const events = await res.json();
 
-    // Filter by keyword in name or description
     const results = events.filter(ev =>
       ev.name.toLowerCase().includes(keyword.toLowerCase()) ||
       (ev.description && ev.description.toLowerCase().includes(keyword.toLowerCase()))
