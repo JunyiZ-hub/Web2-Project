@@ -5,13 +5,26 @@ async function searchEvents() {
   const container = document.getElementById('search-results');
   container.innerHTML = '<p>Searching...</p>';
 
+  if (!keyword) {
+    container.innerHTML = '<p>Please enter a keyword.</p>';
+    return;
+  }
+
   try {
-    const res = await fetch(`${API_BASE}/search?q=${encodeURIComponent(keyword)}`);
+    // Fetch all events (simplify) then filter on client side
+    const res = await fetch(`${API_BASE}/events`);
     const events = await res.json();
-    renderSearchResults(events);
+
+    // Filter by keyword in name or description
+    const results = events.filter(ev =>
+      ev.name.toLowerCase().includes(keyword.toLowerCase()) ||
+      (ev.description && ev.description.toLowerCase().includes(keyword.toLowerCase()))
+    );
+
+    renderSearchResults(results);
   } catch (err) {
     console.error('Something wrong:', err);
-    container.innerHTML = '<p>Failed.</p>';
+    container.innerHTML = '<p>Search failed.</p>';
   }
 }
 
@@ -20,7 +33,7 @@ function renderSearchResults(events) {
   container.innerHTML = '';
 
   if (events.length === 0) {
-    container.innerHTML = '<p>Not Found.</p>';
+    container.innerHTML = '<p>No events found.</p>';
     return;
   }
 
@@ -30,8 +43,8 @@ function renderSearchResults(events) {
     card.innerHTML = `
       <h3>${ev.name}</h3>
       <p>${ev.description}</p>
-      <p><strong>Date：</strong>${ev.event_date}</p>
-      <button onclick="viewDetail(${ev.id})">View Details.</button>
+      <p><strong>Date:</strong> ${ev.event_date}</p>
+      <button onclick="viewDetail(${ev.id})">View Details</button>
     `;
     container.appendChild(card);
   });

@@ -3,7 +3,6 @@ const API_BASE = 'http://localhost:3000/api';
 async function loadEventDetail() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
-
   const container = document.getElementById('event-detail');
 
   if (!id) {
@@ -12,17 +11,9 @@ async function loadEventDetail() {
   }
 
   try {
-    const res = await fetch(`${API_BASE}/events`);
-    const events = await res.json();
-
-    // Find the specific event by ID
-    const event = events.find(e => e.id == id);
-
-    if (!event) {
-      container.innerHTML = '<p>No event found for this ID.</p>';
-      return;
-    }
-
+    const res = await fetch(`${API_BASE}/events/${id}`);
+    if (!res.ok) throw new Error('Event not found');
+    const event = await res.json();
     renderEvent(event);
   } catch (err) {
     console.error('Failed to load event details:', err);
